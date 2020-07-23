@@ -9,7 +9,7 @@ doc_types = {
     "show": SHOW_MAPPING,
 }
 
-test_elasticsearch_host = "http://elasticsearch_test:9200"
+ELASTICSEARCH_TEST_HOST = "http://elasticsearch_test:9200"
 
 
 def setup_elasticsearch():
@@ -17,7 +17,7 @@ def setup_elasticsearch():
 
     for doc_type, mapping_schema in doc_types.items():
         # Create the index
-        index_name = "{}_{}".format(settings.ELASTICSEARCH_INDEX_PREFIX, doc_type)
+        index_name = doc_type
         body = schema.BASE_SCHEMA
         body["settings"]["number_of_shards"] = 1
         body["settings"]["number_of_replicas"] = 1
@@ -31,13 +31,13 @@ def setup_elasticsearch():
 def teardown_elasticsearch():
     es = Elasticsearch(TEST_ES_HOST)
     for doc_type in doc_types.keys():
-        index_name = "{}_{}".format(settings.ELASTICSEARCH_INDEX_PREFIX, doc_type)
+        index_name = doc_type
         es.indices.delete(index=index_name)
 
 
 @pytest.fixture
 def elasticsearch(settings):
-    settings.ELASTICSEARCH_DATA_STORE_HOST = TEST_ES_HOST
+    settings.ELASTICSEARCH_HOST = TEST_ES_HOST
 
     setup_elasticsearch()
     yield Elasticsearch(TEST_ES_HOST)
