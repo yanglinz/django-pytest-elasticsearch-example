@@ -13,23 +13,23 @@ ELASTICSEARCH_TEST_HOST = "http://elasticsearch_test:9200"
 
 
 def setup_elasticsearch():
-    es = Elasticsearch(TEST_ES_HOST)
+    es = Elasticsearch(ELASTICSEARCH_TEST_HOST)
 
-    for doc_type, mapping_schema in doc_types.items():
-        # Create the index
-        index_name = doc_type
-        body = schema.BASE_SCHEMA
-        body["settings"]["number_of_shards"] = 1
-        body["settings"]["number_of_replicas"] = 1
-        body["settings"]["index.store.type"] = "mmapfs"
-        es.indices.create(index=index_name, ignore=400, body=body)
-
-        # Update index with specific mapping
-        es.indices.put_mapping(index=index_name, doc_type=doc_type, body=mapping_schema)
+    for doc_type, schema in doc_types.items():
+        # Define index settings
+        body = {
+            "settings": {
+                "number_of_shards": 1,
+                "number_of_replicas": 1,
+                "index.store.type": "mmapfs",
+            }
+        }
+        body["mappings"] = schema
+        es.indices.create(index=doc_type, ignore=[], body=body)
 
 
 def teardown_elasticsearch():
-    es = Elasticsearch(TEST_ES_HOST)
+    es = Elasticsearch(ELASTICSEARCH_TEST_HOST)
     for doc_type in doc_types.keys():
         index_name = doc_type
         es.indices.delete(index=index_name)
@@ -37,8 +37,8 @@ def teardown_elasticsearch():
 
 @pytest.fixture
 def elasticsearch(settings):
-    settings.ELASTICSEARCH_HOST = TEST_ES_HOST
+    settings.ELASTICSEARCH_HOST = ELASTICSEARCH_TEST_HOST
 
     setup_elasticsearch()
-    yield Elasticsearch(TEST_ES_HOST)
+    yield Elasticsearch(ELASTICSEARCH_TEST_HOST)
     teardown_elasticsearch()
