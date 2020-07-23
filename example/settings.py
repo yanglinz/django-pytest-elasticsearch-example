@@ -1,9 +1,8 @@
 import os
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Django basics
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = "insecure"
 
@@ -48,7 +47,6 @@ TEMPLATES = [
 ]
 
 # Database
-# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
     "default": {
@@ -56,3 +54,7 @@ DATABASES = {
         "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
     }
 }
+
+# Elasticsearch
+
+ELASTICSEARCH_HOST = os.environ.get("ELASTICSEARCH_HOST", "http://elasticsearch:9200")
