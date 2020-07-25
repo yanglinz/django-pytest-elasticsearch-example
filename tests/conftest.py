@@ -4,7 +4,7 @@ from elasticsearch import Elasticsearch
 
 from example.elasticsearch import MOVIE_MAPPING, SHOW_MAPPING
 
-doc_types = {
+schemas = {
     "movie": MOVIE_MAPPING,
     "show": SHOW_MAPPING,
 }
@@ -14,24 +14,21 @@ ELASTICSEARCH_TEST_HOST = "http://elasticsearch_test:9200"
 
 def setup_elasticsearch():
     es = Elasticsearch(ELASTICSEARCH_TEST_HOST)
-
-    for doc_type, schema in doc_types.items():
-        # Define index settings
+    for index_name, schema in schemas.items():
         body = {
             "settings": {
                 "number_of_shards": 1,
                 "number_of_replicas": 1,
                 "index.store.type": "mmapfs",
-            }
+            },
+            "mappings": schema,
         }
-        body["mappings"] = schema
-        es.indices.create(index=doc_type, ignore=[], body=body)
+        es.indices.create(index=index_name, body=body)
 
 
 def teardown_elasticsearch():
     es = Elasticsearch(ELASTICSEARCH_TEST_HOST)
-    for doc_type in doc_types.keys():
-        index_name = doc_type
+    for index_name in schemas.keys():
         es.indices.delete(index=index_name)
 
 

@@ -5,9 +5,10 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.8.0
     environment:
       - cluster.name=docker-cluster
+      - discovery.type=single-node
       - bootstrap.memory_lock=true
       - xpack.security.enabled=false
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - ES_JAVA_OPTS=-Xms256m -Xmx256m
     ulimits:
       memlock:
         soft: -1
