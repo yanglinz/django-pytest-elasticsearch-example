@@ -24,7 +24,6 @@ def search_media(query):
     """Helper method to get movies and shows based on a search query
     """
     client = Elasticsearch(settings.ELASTICSEARCH_HOST)
-    body = {"query": {"match_all": {}}}
     body = {
         "query": {"multi_match": {"query": query, "fields": ["title", "description"]}}
     }
