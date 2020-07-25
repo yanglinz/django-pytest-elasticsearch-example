@@ -5,7 +5,7 @@ from django.conf import settings
 
 MOVIE_MAPPING = {
     "properties": {
-        "id": {"type": "keyword"},
+        "slug": {"type": "keyword"},
         "title": {"type": "text"},
         "description": {"type": "text"},
     }
@@ -13,7 +13,7 @@ MOVIE_MAPPING = {
 
 SHOW_MAPPING = {
     "properties": {
-        "id": {"type": "keyword"},
+        "slug": {"type": "keyword"},
         "title": {"type": "text"},
         "description": {"type": "text"},
     }
@@ -26,9 +26,7 @@ def search_media(query):
     client = Elasticsearch(settings.ELASTICSEARCH_HOST)
     body = {"query": {"match_all": {}}}
     body = {
-        "query": {
-            "multi_match": {"query": query, "fields": ["title", "description"]}
-        }
+        "query": {"multi_match": {"query": query, "fields": ["title", "description"]}}
     }
     response = client.search(index=["movie", "show"], body=body)
     return [h["_source"] for h in response["hits"]["hits"]]
