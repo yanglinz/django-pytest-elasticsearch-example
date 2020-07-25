@@ -10,7 +10,7 @@ Django offers a good story for
 [testing against databases](https://docs.djangoproject.com/en/3.0/topics/testing/overview/#the-test-database),
 I couldn't find any good examples of similar strategies for Elasticsearch.
 
-So here is an example repo that demonstrates how to properly test code Python
+So here is an example repo that demonstrates how to properly test Python code
 that interface with Elasticsearch. We use Django and Pytest specifically in this
 instance, but the general idea should readily extend to other languages and
 frameworks.
