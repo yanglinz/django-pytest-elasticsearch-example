@@ -1,5 +1,7 @@
 # Django Pytest Elasticsearch Example
 
+## Intro
+
 When writing tests that interface with databases or distributed caches, I've
 found that mocking the database/caches out tends to produce tests that are
 brittle and offer very little value, because these mock-based tests usually fail
@@ -15,4 +17,21 @@ that interface with Elasticsearch. We use Django and Pytest specifically in this
 instance, but the general idea should readily extend to other languages and
 frameworks.
 
-Read more about the details here.
+Read more about the details
+[here](https://yanglinzhao.com/posts/test-elasticsearch-in-django).
+
+## Running Locally
+
+If you'd like to run the repo locally,
+[`docker-compose`](https://docs.docker.com/compose/install/) is a requirement.
+First build the docker image by running the following command:
+
+```sh
+docker-compose build
+```
+
+Next, run the example test inside a docker container:
+
+```sh
+docker-compose run web poetry run pytest tests
+```
